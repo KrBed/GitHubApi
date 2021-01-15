@@ -35,11 +35,13 @@ class GithubAuthorizationController extends AbstractController
      *
      *
      * @param Request $request
-     * @param ClientRegistry $clientRegistry
      * @Route ("/auth" , name="auth")
      */
-    public function connectCheckAction(Request $request, ClientRegistry $clientRegistry)
+    public function connectCheckAction(Request $request)
     {
+        if($request->query->get('error')){
+          return  $this->render('exception/show.html.twig',['error'=>$request->query->get('error_description')]);
+        }
     }
 
     /**

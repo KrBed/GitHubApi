@@ -18,18 +18,28 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
+use Twig\Environment;
 
 class GitHubAuthenticator extends  SocialAuthenticator
 {
     private $clientRegistry;
     private $em;
     private $router;
+    private $twig;
 
-    public function __construct(ClientRegistry $clientRegistry, EntityManagerInterface $em, RouterInterface $router)
+    /**
+     * GitHubAuthenticator constructor.
+     * @param ClientRegistry $clientRegistry
+     * @param EntityManagerInterface $em
+     * @param RouterInterface $router
+     * @param Environment $twig
+     */
+    public function __construct(ClientRegistry $clientRegistry, EntityManagerInterface $em, RouterInterface $router, Environment $twig)
     {
         $this->clientRegistry = $clientRegistry;
         $this->em = $em;
         $this->router = $router;
+        $this->twig = $twig;
     }
 
 
@@ -43,32 +53,33 @@ class GitHubAuthenticator extends  SocialAuthenticator
 
     public function supports(Request $request): bool
     {
-        return $request->attributes->get('_route') === 'auth';
+        if(!empty($request->query->get('error'))){
+            return false;
+        }else{
+            return $request->attributes->get('_route') === 'auth';
+        }
     }
 
     public function getCredentials(Request $request)
     {
-        $client = $this->clientRegistry->getClient('github');
+            $client = $this->clientRegistry->getClient('github');
 
-        $params = GitHubConfig::getDataToObtainToken($request);
-        $credentials = $client->getAccessToken($params);
-        $request->getSession()->set('access_token',$credentials->getToken());
+            $params = GitHubConfig::getDataToObtainToken($request);
+            $credentials = $client->getAccessToken($params);
+            $request->getSession()->set('access_token',$credentials->getToken());
 
-        return $credentials;
+            return $credentials;
     }
 
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
         try {
-            // the exact class dependusers on which provider you're using
             /** @var Github $user */
             $user = $this->clientRegistry->getClient('github')
                 ->fetchUserFromToken($credentials)->toArray();
             $existingUser = $this->em->getRepository(User::class)
             ->findOneBy(['gitHubId'=>$user['id']]);
             if($existingUser){
-
-
                 return $existingUser;
             }
             $newUser = new User();
@@ -82,10 +93,7 @@ class GitHubAuthenticator extends  SocialAuthenticator
             return $newUser;
 
         } catch (IdentityProviderException $e) {
-            // something went wrong!
-            // probably you should return the reason to the user
-            var_dump($e->getMessage());
-            die;
+           return $this->twig->render('exception/show.html.twig',['error'=>$e->getMessage()]);
         }
     }
 
