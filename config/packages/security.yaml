@@ -1,0 +1,25 @@
+security:
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    providers:
+        users:
+            entity:
+                class: 'App\Entity\User'
+                property: $username
+        users_in_memory: { memory: null }
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            logout:
+                path: logout
+                target: home
+            anonymous: lazy
+            provider: users_in_memory
+            guard:
+                authenticators:
+                    - App\Security\GitHubAuthenticator
+    access_control:
+         - { path: ^/authors/new, roles: ROLE_USER }
+         - { path: ^/repozytoria, roles: ROLE_USER }
+         - { path: ^/repozytoria/new, roles: ROLE_USER }

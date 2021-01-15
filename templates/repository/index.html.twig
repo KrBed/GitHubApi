@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+ {% block title %}Repozytoria{% endblock %}
+{% block body %}
+    <div class="pt-2">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="d-inline">Repozytoria użytkownika {{ app.user.username }}</h5> <a
+                        href="{{ path('repository_add') }}" style="float:right"
+                        class="btn btn-primary my-2 my-sm-0 d-inline">Dodaj Repozytorium</a>
+            </div>
+            <div class="card-body">
+                <table class="table table-sm table-hover table-striped table-bordered">
+                    <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Nazwa</th>
+                        <th scope="col">Opis</th>
+                        <th scope="col">Utworzone</th>
+                        <th scope="col">Url</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for repo in repos %}
+                        <tr>
+                            <th scope="row">{{ repo.id }}</th>
+                            <td>{{ repo.name }}</td>
+                            <td>{{ repo.description }}</td>
+                            <td>{{ repo.created }}</td>
+                            <td>{{ repo.url }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

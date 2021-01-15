@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="pt-2">
+        <div class="card">
+            {{form_start(repoForm, {'action': path('repository_add'),'methor':'POST'}) }}
+            <div class="card-header">
+                <h5 class="d-inline">Nowe repozytorium</h5>
+            </div>
+            <div class="card-body">
+                {{ form_row(repoForm.name) }}
+                {{ form_row(repoForm.description) }}
+            </div>
+            <div class="card-footer text-center">
+                <button type="submit" class="btn btn-primary">Dodaj</button>
+            </div>
+            {{ form_end(repoForm) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block title %}
+    Nowe Repozytorium
+{% endblock %}
+

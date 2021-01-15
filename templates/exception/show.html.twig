@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+ {% block title %}Exception{% endblock %}
+{% block body %}
+    <h1>Upps, coś poszło nie tak, pojawił się błąd !!!</h1>
+        <h3>Kod błędu : {{ error }}</h3>
+    <p>
+{#        The requested page couldn't be located. Checkout for any URL#}
+{#        misspelling or <a href="{{ path('homepage') }}">return to the homepage</a>.#}
+    </p>
+{% endblock %}

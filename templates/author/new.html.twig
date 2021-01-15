@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% for message in app.flashes('notice') %}
+        <div class="flash-notice  alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <div class="pt-5">
+        <div class="card">
+            {{ form_start(authorForm, {'action': path('add_author'),'methor':'POST','attr': {'novalidate': 'novalidate'}}) }}
+            <h5 class="card-header">Nowy Pisarz</h5>
+            <div class="card-body">
+                <div class="offset-1 col-10">
+                    <h5 class="card-title">Pisarz</h5>
+                    <div class="col">
+                        {{ form_row(authorForm.firstName ) }}
+                    </div>
+                    <div class="col">
+                        {{ form_row(authorForm.lastName) }}
+                    </div>
+                </div>
+                <div class="offset-1 col-10">
+                    <div id="books">
+                        <h5 class="card-title">Książki</h5>
+                        <div id="book-fields-list"
+                             data-prototype="{{ form_widget(authorForm.books.vars.prototype)|e }}"
+                             data-widget-tags="{{ '<p></p>'|e }}"
+                             data-widget-counter="{{ authorForm.books|length }}">
+                            {% for bookField in authorForm.books %}
+                                {{ form_row(bookField) }}
+                            {% endfor %}
+                        </div>
+
+                        <button type="button"
+                                class="btn btn-primary add-another-collection-widget"
+                                data-list-selector="#book-fields-list">Dodaj książkę
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-center">
+                <button type="submit" class="btn btn-primary">Dodaj</button>
+            </div>
+            {{ form_end(authorForm) }}
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        jQuery(document).ready(function () {
+            $("fieldset.form-group").remove();
+            jQuery('.add-another-collection-widget').click(function (e) {
+                var list = jQuery(jQuery(this).attr('data-list-selector'));
+
+                var counter = list.data('widget-counter') || list.children().length;
+
+                var newWidget = list.attr('data-prototype');
+                newWidget = newWidget.replace(/__name__/g, counter);
+                counter++;
+
+                list.data('widget-counter', counter);
+
+                // create a new list element and add it to the list
+                var newElem = jQuery(list.attr('data-widget-tags')).html(newWidget);
+                newElem.appendTo(list);
+            });
+        });
+
+    </script>
+{% endblock %}
+
