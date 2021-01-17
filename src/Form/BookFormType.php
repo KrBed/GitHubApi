@@ -15,7 +15,7 @@ class BookFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('title', TextType::class, ['label' => false, 'attr' => ['placeholder' => 'Tytuł książki', 'class'=>'d-inline']]);
+        $builder->add('title', TextType::class, ['label' => false, 'attr' => ['placeholder' => 'Tytuł książki', 'class'=>'d-inline ml-3']]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

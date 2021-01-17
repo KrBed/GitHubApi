@@ -43,17 +43,32 @@
             <div class="card-footer text-center">
                 <button type="submit" class="btn btn-primary">Dodaj</button>
             </div>
-            {{ form_end(authorForm) }}
+
         </div>
     </div>
+    {{ form_end(authorForm) }}
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
     <script>
-        jQuery(document).ready(function () {
-            $("fieldset.form-group").remove();
-            jQuery('.add-another-collection-widget').click(function (e) {
-                var list = jQuery(jQuery(this).attr('data-list-selector'));
+        $(document).ready(function () {
+
+            $bookInputList = $("#book-fields-list");
+            inputs = $bookInputList.find("input");
+            ids = $(inputs).attr('id');
+            inputs.each(function(e){
+                // console.log($(this));
+                let button = "<button type='button' class='btn btn-danger d-inline ml-5 mb-1 remove-book'>Usuń</button>";
+                $(this).after(button);
+            });
+
+            $(document).on("click",".remove-book",function(){
+                $(this).closest('.form-group').remove();
+            });
+             $("legend").empty()
+            $('.add-another-collection-widget').click(function (e) {
+
+                var list = $($(this).attr('data-list-selector'));
 
                 var counter = list.data('widget-counter') || list.children().length;
 
@@ -63,10 +78,21 @@
 
                 list.data('widget-counter', counter);
 
+
                 // create a new list element and add it to the list
                 var newElem = jQuery(list.attr('data-widget-tags')).html(newWidget);
                 newElem.appendTo(list);
+                var id = "#author_form_books_" + (counter -1);
+                $this = $("#author_form_books_" + (counter - 1));
+                $input = $this.find("input");
+                console.log ($input);
+                // addButton($input); // addButton($input);
+                $input.after("<button type='button' class='btn btn-danger d-inline ml-5 mb-1 remove-book'>Usuń</button>")
             });
+
+            function addButton(item){
+                 item.after("<button type='button' class='btn btn-danger d-inline ml-5 mb-1 remove-book'>Usuń</button>")
+            }
         });
 
     </script>

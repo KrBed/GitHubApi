@@ -34,6 +34,7 @@ class Author
 
     /**
      * @ORM\OneToMany(targetEntity=Book::class, mappedBy="author")
+     * @Assert\Valid()
      */
     private $books;
 

@@ -44,12 +44,12 @@ class AuthorController extends AbstractController
             $result = $this->authorRepository->addAuthor($form->getData());
             if ($result === true) {
                 $this->addFlash('notice', 'Dodano nowego autora');
+                $form = $this->createForm(AuthorFormType::class,new Author());
             } else {
                 $this->addFlash('notice', 'Coś poszło nie tak, nie dodano nowego autora');
+                return $this->render('author/new.html.twig', ['authorForm' => $form->createView()]);
             }
         }
-
-        $form = $this->createForm(AuthorFormType::class,new Author());
 
         return $this->render('author/new.html.twig', ['authorForm' => $form->createView()]);
     }
