@@ -42,8 +42,6 @@ class GitHubAuthenticator extends  SocialAuthenticator
         $this->twig = $twig;
     }
 
-
-
     public function start(Request $request, AuthenticationException $authException = null)
     {
         return new RedirectResponse(
@@ -84,7 +82,7 @@ class GitHubAuthenticator extends  SocialAuthenticator
             }
             $newUser = new User();
            $newUser->setGitHubId($user['id']);
-           $newUser->setLogin($user['login']);
+           $newUser->setUsername($user['login']);
            $newUser->setAccessToken($credentials->getToken());
             $this->em->persist($newUser);
 

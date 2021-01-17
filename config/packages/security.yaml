@@ -20,6 +20,6 @@ security:
                 authenticators:
                     - App\Security\GitHubAuthenticator
     access_control:
-         - { path: ^/authors/new, roles: ROLE_USER }
+         - { path: ^/author/new, roles: ROLE_USER }
          - { path: ^/repozytoria, roles: ROLE_USER }
          - { path: ^/repozytoria/new, roles: ROLE_USER }

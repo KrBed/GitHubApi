@@ -59,6 +59,10 @@ class User implements UserInterface
         return $this->accessToken;
     }
 
+    /**
+     * @param string $accessToken
+     * @return $this
+     */
     public function setAccessToken(string $accessToken): self
     {
         $this->accessToken = $accessToken;
@@ -93,6 +97,16 @@ class User implements UserInterface
     public function getUsername(): string
     {
         return $this->username;
+    }
+
+    /**
+     * @param $username
+     * @return $this
+     */
+    public function setUsername($username): User
+    {
+         $this->username = $username;
+         return $this;
     }
 
     public function eraseCredentials()
